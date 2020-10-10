@@ -24,3 +24,99 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+div #background-content {background: #f0fafff0;} /*perchè non funziona? --> Edita il variable.css in md color background*/
+
+.LoginInputStyle{border-bottom: 2px solid #92b5f1;
+ /* background-color:rgb(245, 248, 250);*/
+  opacity: 70%;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.LoginButtonHeight{
+  min-height: 50px;
+}
+
+.recuperomail{
+  margin-top:10px;
+}
+
+.fixed-low-right {
+  position: fixed;
+  right:10px;
+  bottom:10px;
+}
+.showpwd{
+  position:relative;
+  height: 30px;
+  width: 30px;
+  background-color: #3a7be0;
+  border-radius: 10px;
+  border: none;
+}
+.c{
+  padding-top:20px;
+  padding-bottom:10px;
+  text-align:center;
+  font-weight: bold;
+  font-size:23px; }
+
+#container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5%;
+  /*transform: translateY(-50%);*/
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+.nobg{background: transparent}
+/* classi popup login*/
+
+.my-custom-class .alert-wrapper {
+  background: rgba(255, 255, 255, 1); /*rgba(146, 181, 241, 0.9);*/
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+.alert-title.sc-ion-alert-md {
+  color: #000000;
+  text-align: center;
+  font-weight: bold;
+}
+.alert-sub-title.sc-ion-alert-md {
+  text-align: center;
+  color: #000000
+}
+
+.alert-button.sc-ion-alert-md {color:white !important;
+  background: rgba(146, 181, 241, 0.9) !important;
+  border-radius: 10px !important;
+  justify-content: center !important;
+  margin-bottom: 10px !important;
+}
+.alert-button-group.sc-ion-alert-md {
+  justify-content: center;
+  }
+.sc-ion-alert-md-h {--max-width: 80%;}
+/*fine classi popup login*/

@@ -1,0 +1,120 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Sign Up - Rivenditore
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-content">
+ <div id="container">
+
+  <ion-grid *ngIf="showRegister">
+    <form  #form="ngForm" (ngSubmit)="register(form)">
+      <ion-row>
+        <ion-col size-md="6" offset-md="3" >  <!-- rimossa:    class="ion-margin-top"-->
+          <!--<img src="assets/logo.png" alt="Logo" width="50%" height="70%">-->
+          <div class="ion-text-center c">Inserisci i tuoi dati</div>
+
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="6" offset-md="3">
+
+          <ion-card class="LoginInputStyle">
+              <ion-item lines="full">
+                <ion-label position="stacked">Nome:</ion-label>
+                <ion-input clearInput autocomplete="name" type="text" name="name" ngModel required="true"></ion-input>
+              </ion-item>
+              <ion-item lines="full">
+                  <ion-label position="stacked">Telefono:</ion-label>
+                  <ion-input clearInput inputmode="tel" autocomplete="tel" type="text" name="cell" ngModel required="true"></ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                  <ion-label position="stacked">Email:</ion-label>
+                  <ion-input clearInput autocomplete="email" inputmode="email" type="email" name="email" ngModel required="true"></ion-input>
+              </ion-item>
+              <ion-item lines="full">
+                <ion-label position="stacked">Cognome:</ion-label>
+                <ion-input clearInput autocomplete="family-name" type="text" name="lastName" ngModel required="true"></ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                  <ion-label position="stacked">Referent Number:</ion-label>
+                  <ion-input clearInput  inputmode="referentNumber" type="text" name="referentNumber" ngModel required="true"></ion-input>
+              </ion-item>  
+              <ion-item lines="full">
+                <ion-label position="stacked">Codice Fiscale/Partita Iva:</ion-label>
+                <ion-input clearInput type="text" name="cf" ngModel required="true"></ion-input>
+              </ion-item>
+              <ion-item lines="full">
+                  <ion-label position="stacked">Indirizzo o sede legale:</ion-label>
+                  <ion-input clearInput autocomplete="street-address" type="text" name="address" ngModel required="true"></ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                  <ion-label position="stacked">Display Name:</ion-label>
+                  <ion-input clearInput  inputmode="displayName" type="text" name="displayName" ngModel required="true"></ion-input>
+              </ion-item> 
+              <ion-item lines="none">
+                <ion-label>Role</ion-label>
+                <ion-select interface="action-sheet" ngModel name="role">
+                  <ion-select-option translate> utente </ion-select-option>
+                  <ion-select-option translate> Azienda </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+          </ion-card>
+          
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="6" offset-md="3">
+          <ion-card class="LoginInputStyle"> 
+              <ion-item lines="none">    <!-- vedasi https://stackoverflow.com/questions/46815831/how-to-create-login-in-ionic-2-with-show-hide-password -->
+                  <ion-label position="stacked">Password:</ion-label>
+                  <ion-input [type]="passwordType" clearOnEdit="false" name="password" ngModel required="true"></ion-input>
+                  <ion-icon slot="end"  [name]="passwordIcon" class="ion-padding-top" (click)='hideShowPassword()'></ion-icon>
+              </ion-item>
+              <ion-item lines="none">    <!-- vedasi https://stackoverflow.com/questions/46815831/how-to-create-login-in-ionic-2-with-show-hide-password -->
+                  <ion-label position="stacked">Confirmation Password:</ion-label>
+                  <ion-input [type]="passwordType" clearOnEdit="false" name="password_confirmation" ngModel required="true"></ion-input>
+                  <ion-icon slot="end"  [name]="passwordIcon" class="ion-padding-top" (click)='hideShowPassword()'></ion-icon>
+              </ion-item>
+          </ion-card>
+
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col *ngIf="hideMe" size-md="6" offset-md="3">
+                <ion-button type="submit"  class="LoginButtonHeight" shape="round" expand="block" size="small" fill="solid" color="primary"> <!-- routerLink="/licenza"-->
+                  <ion-icon slot="start" name="log-in-outline"></ion-icon>
+                  Prosegui
+                </ion-button>
+        </ion-col>
+          <ion-col *ngIf="showMe" size-md="6" offset-md="3">
+              <ion-card class="LoginInputStyle">
+              <p class="ion-padding">Inserisci il codice di conferma appena ricevuto</p>
+              <ion-item >
+                <!-- <ion-label position="stacked">Inserisci qui il 4 digit code:</ion-label> -->
+                  <ion-input clearInput type="password" required="true"></ion-input>
+              </ion-item>
+              <ion-button (click)="restart()" routerLink="/licenza">Conferma il Codice</ion-button>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+        <ion-row>
+            <ion-col size-md="6" offset-md="3">
+                <p>Torna al <a routerLink="/login" rel="noopener noreferrer">Login</a></p>
+            </ion-col>
+        </ion-row>
+    </form>
+  </ion-grid>
+</div>
+    <ion-row>
+        <ion-col size-md="12" *ngIf="!showRegister" >  <!-- rimossa:    class="ion-margin-top"-->
+            <!--<img src="assets/logo.png" alt="Logo" width="50%" height="70%">-->
+            <div class="ion-text-center c" translate>Hai ricevuto una mail, clicca sul pulsante per concludere la tua iscrizione !</div>
+
+        </ion-col>
+    </ion-row>
+</ion-content>

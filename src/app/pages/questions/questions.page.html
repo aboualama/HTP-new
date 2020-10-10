@@ -1,0 +1,287 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="secondary">
+            <ion-button>
+                <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>HTP</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button color="dark">
+                <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-item>
+            <ion-label>Language</ion-label>
+            <ion-select interface="action-sheet" placeholder="Select One" [(ngModel)]="lang"
+                        (ionChange)="selectlang(lang)">
+                <ion-select-option value="en">EN</ion-select-option>
+                <ion-select-option value="fr">FR</ion-select-option>
+                <ion-select-option value="it">IT</ion-select-option>
+                <ion-select-option value="pt">PT</ion-select-option>
+                <ion-select-option value="el">GR</ion-select-option>
+            </ion-select>
+        </ion-item>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    {{q_type}}
+
+    <ion-card *ngIf="entroEnabled">
+        <ion-card-content>
+            <ion-row class="video">
+                <video *ngIf="entro.video" [src]="entro.video" #videoPlayerDemo
+                       (canplaythrough)="checkLoaded($event)"
+                       [autoplay]="false" playsinline
+                       (ended)="entroVideoEnd($event)"
+                       [style.width]="'100%'"
+                ></video>
+                <ion-text translate>
+                    {{entro.msg}}
+                </ion-text>
+                <ion-col *ngIf="entro.video">
+                    <ion-button (click)="videoDemo()" *ngIf="demoButton" translate>Comincia demo</ion-button>
+                </ion-col>
+            </ion-row>
+
+        </ion-card-content>
+    </ion-card>
+
+    <ion-row *ngIf="question && !entroEnabled" [ngSwitch]="question.type">
+
+        <!--Recognation-->
+        <ion-col *ngSwitchCase="'Recognation'">
+            <ion-card class="LoginInputStyle">
+                <ion-card-header>
+                    <ion-card-subtitle>Question: {{ question.question }} {{lang}} </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-img src="http://dev.hpt.training/uploads/image/{{question.image}}"></ion-img>
+                            <hr>
+                            <ion-item lines="full" class="w-100">
+                                <ion-label translate>Scegli la risposta giusta:</ion-label>
+                            </ion-item>
+
+                            <ion-list class="w-100">
+
+                                <ion-radio-group [(ngModel)]="selected">
+                                    <ion-item class="ion-text-wrap" *ngFor="let ans of question.shuffled">
+                                        <ion-label>{{  ans.answer }}</ion-label>
+                                        <ion-radio [ngModel]="ans" slot="start"></ion-radio>
+                                    </ion-item>
+                                </ion-radio-group>
+                            </ion-list>
+                        </ion-row>
+                    </ion-grid>
+
+                </ion-card-content>
+
+            </ion-card>
+
+        </ion-col>
+        <!--Risk-Responsibilty2-->
+        <div *ngSwitchCase="'Risk-Responsibilty'">
+            <ion-card class="">
+                <ion-card-header>
+                    <ion-card-subtitle class="ion-text-wrap">Question: {{ question.question }} </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-img src="http://dev.hpt.training/uploads/image/{{question.image}}"></ion-img>
+                            <hr>
+                            <!-- <div class="video">
+                                 <video controls (click)="toggleVideo()" #videoPlayer
+                                 style="max-height: 100%; max-width: 100%; display: block; margin: 0 auto; margin-bottom: 25px;">
+                                     <source src="{{question.video}}" type="video/mp4" />
+                                     Browser not supported
+                                 </video>
+                             </div>-->
+                            <ion-item lines="full" class="w-100">
+                                <ion-label translate>Choose Right Answers</ion-label>
+                            </ion-item>
+
+                            <ion-list class="">
+
+                                <ion-radio-group [(ngModel)]="selected">
+                                    <ion-item class="ion-text-wrap" *ngFor="let ans of question.shuffled">
+                                        <ion-label class="ion-text-wrap">{{  ans.answer }}</ion-label>
+                                        <ion-radio [ngModel]="ans" slot="start"></ion-radio>
+                                    </ion-item>
+                                </ion-radio-group>
+                            </ion-list>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+
+            </ion-card>
+
+        </div>
+
+        <!--Risk-Responsibilty2-->
+        <div *ngSwitchCase="'Risk-Responsibilty2'">
+            <ion-card class="LoginInputStyle">
+                <ion-card-header>
+                    <ion-card-subtitle class="ion-text-wrap">Question: {{ question.question }} </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-img src="{{question.image}}"></ion-img>
+                            <hr>
+
+                            <ion-item lines="full">
+                                <ion-label>Choose Right Answer</ion-label>
+                            </ion-item>
+
+                            <ion-list>
+                                <ion-item class="ion-text-wrap">
+                                    <ion-label>{{  question.right_answer }}</ion-label>
+                                    <ion-checkbox slot="start"></ion-checkbox>
+                                </ion-item>
+
+                                <ion-item class="ion-text-wrap">
+                                    <ion-label>{{  question.wrongans_1  }}</ion-label>
+                                    <ion-checkbox slot="start"></ion-checkbox>
+                                </ion-item >
+
+                                <ion-item class="ion-text-wrap">
+                                    <ion-label>{{  question.wrongans_2  }}</ion-label>
+                                    <ion-checkbox slot="start"></ion-checkbox>
+                                </ion-item>
+
+                                <ion-item class="ion-text-wrap">
+                                    <ion-label class="ion-text-wrap">{{  question.wrongans_3  }}</ion-label>
+                                    <ion-checkbox slot="start"></ion-checkbox>
+                                </ion-item>
+                            </ion-list>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+                <ion-button color="primary" translate (click)="avanti()" [disabled]="!selected">
+                    <ion-spinner *ngIf="loading"></ion-spinner>
+                    Avanti
+                </ion-button>
+            </ion-card>
+        </div>
+
+        <!--Reaction-SMC-->
+        <div *ngSwitchCase="'Reaction-SMC'">
+            <ion-card class="LoginInputStyle">
+                <ion-card-header>
+                    <ion-card-subtitle>Question: {{ question.question }} </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-img src="{{question.image}}"></ion-img>
+                            <hr>
+                            <div class="video">
+                                <!--<video controls (click)="toggleVideo()" #videoPlayer
+                                style="max-height: 100%; max-width: 100%; display: block; margin: 0 auto; margin-bottom: 25px;">
+                                    <source src="{{question.video}}" type="video/mp4" />
+                                    Browser not supported
+                                </video>-->
+                            </div>
+                            <ion-item lines="full">
+                                <ion-label>Chose Right Answer</ion-label>
+                            </ion-item>
+
+                            <ion-list>
+
+                                <ion-radio-group [(ngModel)]="selected">
+                                    <ion-item *ngFor="let ans of question.shuffled">
+                                        <ion-label>{{  ans.answer }}</ion-label>
+                                        <ion-radio [(ngModel)]="ans.answer" slot="start"></ion-radio>
+                                    </ion-item>
+
+
+                                </ion-radio-group>
+                            </ion-list>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+                <ion-footer>
+                    <ion-button color="primary" translate (click)="avanti()" [disabled]="!selected">
+                        <ion-spinner *ngIf="loading"></ion-spinner>
+                        Avanti
+                    </ion-button>
+                </ion-footer>
+            </ion-card>
+        </div>
+        <!--Hazard-Perception-->
+        <div *ngSwitchCase="'Hazard-Perception'">
+            <ion-row class="videorow">
+                <ion-col class="col-12">
+                    <video id="video" src="http://dev.hpt.training/uploads/video/{{question.video}}" #videoPlayer
+                           (canplaythrough)="checkLoaded($event)"
+                           [autoplay]="false" playsinline
+                           (ended)="checkEnded($event)"
+                           [style.width]="'100%'"
+
+                    ></video>
+                </ion-col>
+                <!--<ion-col>
+                        Pericolo
+                    </ion-fab-button>
+                </ion-col>-->
+            </ion-row>
+        </div>
+
+        <!--Hazard-->
+        <div *ngSwitchCase="'Hazard'">
+            <ion-row class="video">
+
+                <video src="http://dev.hpt.training/uploads/video/{{question.video}}" #videoPlayer
+                       (canplaythrough)="checkLoaded($event)"
+                       [autoplay]="false" playsinline
+                       (ended)="checkEnded($event)"
+                       [style.width]="'100%'"
+                ></video>
+
+
+            </ion-row>
+            <ion-row>
+                <ion-button (click)="toggleVideo($event)">Comincia</ion-button>
+
+
+            </ion-row>
+        </div>
+
+        <div *ngSwitchDefault>
+            No Questions
+        </div>
+
+
+    </ion-row>
+
+
+</ion-content>
+
+
+<ion-footer>
+
+    <ion-toolbar [color]="colorFooter">
+
+
+        <!-- <p class="ion-text-center">Conferma la scheda</p> -->
+        <ion-buttons slot="end">
+            <ion-button (click)="toggleVideo($event)" *ngIf="videoStartButton && buttonFooter=='comincia'" >Comincia</ion-button>
+            <ion-button  (click)="SaveTimeVideo()" *ngIf="!videoStartButton && buttonFooter=='pericolo'" >Pericolo</ion-button>
+            <ion-button (click)="avanti()" [disabled]="avantiDisabled" *ngIf=" buttonFooter=='avanti'">
+                <ion-label translate>Avanti</ion-label>
+                <ion-icon slot="end" name="send"></ion-icon>
+            </ion-button>
+            <!--<ion-button (click)="avanti()"  color="secondary">
+                <ion-label translate>Avanti</ion-label>
+                <ion-icon slot="end" name="send"></ion-icon>
+            </ion-button>-->
+        </ion-buttons>
+    </ion-toolbar>
+
+</ion-footer>

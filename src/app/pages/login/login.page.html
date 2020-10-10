@@ -1,0 +1,80 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>
+             {{ 'Login' | translate  }}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="background">
+
+    <div id="container">
+        <ion-item>
+            <ion-label>Language</ion-label>
+            <ion-select  interface="action-sheet" placeholder="Select One"  [(ngModel)]="lang" (ionChange)="selectlang(lang)">
+                <ion-select-option value="en">EN</ion-select-option>
+                <ion-select-option value="fr">FR</ion-select-option>
+                <ion-select-option value="it">IT</ion-select-option>
+                <ion-select-option value="pt">PT</ion-select-option>
+                <ion-select-option value="el">GR</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-grid>
+            <form  #form="ngForm" (ngSubmit)="login(form)">
+            <ion-row>
+                <ion-col size-md="6" offset-md="3" class="ion-margin-top">
+                    <img src="assets/Logo.png"
+                         alt="Logo" width="170px" height="170px">
+                    <div class="ion-text-center c" translate>Accedi ad HPT</div>
+
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                    <ion-col size-md="6" offset-md="3">
+
+                        <ion-card class="LoginInputStyle">
+                            <ion-item lines="none">
+                                <ion-label position="stacked" translate>Username :</ion-label>
+                                <ion-input clearInput autocomplete="email" name="email" ngModel inputmode="text"  required="true" type="email"></ion-input>
+                            </ion-item>
+                        </ion-card>
+                        <ion-card class="LoginInputStyle">
+
+                            <ion-item lines="none">    <!-- vedasi https://stackoverflow.com/questions/46815831/how-to-create-login-in-ionic-2-with-show-hide-password -->
+                                <ion-label position="stacked" translate>Password</ion-label>
+                                <ion-input [type]="passwordType" autocomplete="password" name="password" ngModel clearOnEdit="false"></ion-input>
+                                <ion-icon slot="end"  [name]="passwordIcon" class="ion-padding-top" (click)='hideShowPassword()'></ion-icon>
+                            </ion-item>
+
+                        </ion-card>
+                    </ion-col> 
+            </ion-row>
+            <!--<ion-row>
+              <ion-col size-md="6" offset-md="3">
+
+              </ion-col>
+            </ion-row> -->
+            <ion-row>
+                <ion-col size-md="6" offset-md="3">
+
+                    <ion-button type="submit" class="LoginButtonHeight" shape="round" expand="block" size="small" fill="solid"
+                                color="primary" >
+                        <ion-icon slot="start" name="log-in-outline"></ion-icon>
+                        Login:
+                    </ion-button>
+
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size-md="6" offset-md="3">
+                    <!--<strong>Hai problemi con l'accesso?</strong>-->
+                    <p><a routerLink="/pswdimenticata" rel="noopener noreferrer" translate>Password
+                        dimenticata?</a> · <a (click)="presentAlertMultipleButtons()"  rel="noopener noreferrer" translate>Registrati ora</a></p>  <!-- routerLink="/registrazione" -->
+                </ion-col>
+            </ion-row>
+        </form>
+        </ion-grid>
+
+    </div>
+
+</ion-content>
