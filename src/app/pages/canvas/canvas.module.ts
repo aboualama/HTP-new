@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { CanvasPageRoutingModule } from './canvas-routing.module';
 
 import { CanvasPage } from './canvas.page';
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    CanvasPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        CanvasPageRoutingModule,
+        TranslateModule
+    ],
   declarations: [CanvasPage]
 })
 export class CanvasPageModule {}

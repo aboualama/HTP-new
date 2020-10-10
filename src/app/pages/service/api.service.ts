@@ -82,8 +82,32 @@ export class ApiService {
             }),
         );
     }
+    updateanswers(body) {
+        return this.http.post(this.env.API_URL + 'updateanswers', body, this.env.options).pipe(
+            tap((data: any) => {
+                this.storage.set('data', data)
+                    .then(
+                        () => {
+                            if (data.status == 200) {
+                                console.log('done');
+                            } else {
+                                console.log(data.message);
+                            }
+                        },
+                    );
+                return data;
+            }),
+        );
+    }
 
-
+    checklicens(body) {
+        return this.http.post(this.env.API_URL + 'getResultBylisence', body, this.options)
+            .pipe(
+                tap(_ => {
+                }),
+                catchError(this.handleError(this.env.API_URL + 'getResultBylisence'))
+        );
+    }
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
             console.error(error);
@@ -130,4 +154,7 @@ export class ApiService {
     }
 
 
+    sendEmail(licence: number) {
+        
+    }
 }

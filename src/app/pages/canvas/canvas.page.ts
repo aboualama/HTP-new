@@ -1,6 +1,10 @@
 import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {Platform} from "@ionic/angular";
 import {NativeAudio} from "@ionic-native/native-audio/ngx";
+import * as moment from 'moment';
+import {ApiService} from "../service/api.service";
+import {Router} from "@angular/router";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-canvas',
@@ -24,8 +28,17 @@ export class CanvasPage implements OnInit {
     private headerHeight: any;
     private footerHeight: number;
     entroEnabled: any = true;
+    attemp = 0;
+    buttonFooter = "avanti";
+    private result: any[] = [];
 
-    constructor(private renderer: Renderer2, private platform: Platform, private nativeAudio: NativeAudio) {
+    constructor(private renderer: Renderer2,
+                private platform: Platform,
+                private nativeAudio: NativeAudio,
+                private quizService: ApiService,
+                private router: Router,
+                private translateService: TranslateService
+    ) {
 
     }
 
@@ -33,19 +46,24 @@ export class CanvasPage implements OnInit {
 
     }
 
-    initAudio(){
+    initAudio() {
         this.nativeAudio.preloadSimple("1", "audio/beep-01a.mp3")
         this.audio = new Audio("assets/audio/beep-01a.mp3");
     }
-    playAudio(){
-        // this.audio.play();
-        this.nativeAudio.play("1");
-    }
-    ngAfterViewInit() {
-    }
-    initCanvas(){
-        this.canvasElement = this.canvas.nativeElement;
 
+    playAudio() {
+        // this.audio.play();
+        //   this.nativeAudio.play("1");
+    }
+
+    ngAfterViewInit() {
+
+
+    }
+
+    initCanvas() {
+        this.canvasElement = this.canvas.nativeElement;
+        console.log(this.canvasElement);
         //     this.totalWidth = this.platform.width();
         //    this.totalHeight = this.platform.width();
 
@@ -56,19 +74,35 @@ export class CanvasPage implements OnInit {
             this.cx.lineWidth = 1;
 
             this.totalWidth = this.divCanv.nativeElement.offsetWidth;
-            this.totalHeight =  this.divCanv.nativeElement.offsetHeight;
+            this.totalHeight = this.divCanv.nativeElement.offsetHeight;
             console.log(this.totalHeight, this.totalWidth);
             this.renderer.setAttribute(this.canvasElement, 'width', this.totalWidth + '');
             this.renderer.setAttribute(this.canvasElement, 'height', this.totalHeight + '');
+        }, 0);
+        this.initSample();
+    }
 
+    initSample() {
+        if (this.attemp < 5) {
             const rand: number = this.getRandom(5000, 2000);
-            setInterval(() => {
-                const ranx = this.getRandom(this.totalWidth-5, 0);
-                const rany = this.getRandom(this.totalHeight-5, 0);
+            let intervalId = setInterval(() => {
+                const ranx = this.getRandom(this.totalWidth - 20, 20);
+                const rany = this.getRandom(this.totalHeight - 20, 20);
+                this.result[this.attemp] = {};
+                this.result[this.attemp].startTime = moment();
                 this.loadImageOnCanvas(ranx, rany)
+                setTimeout(() => {
+                    this.attemp = this.attemp + 1;
+                    clearInterval(intervalId);
+                    this.initSample();
+                }, 1000)
+
             }, rand)
 
-        }, 0);
+        } else {
+            this.buttonFooter = 'avanti';
+        }
+
     }
 
 
@@ -81,7 +115,7 @@ export class CanvasPage implements OnInit {
         this.image = new Image();
         this.image.onload = () => {
             this.cx.drawImage(this.image, pozx, pozy, 40, 40);
-            this.audio.play();
+            // this.audio.play();
             //  this.audio.play();
         }
         this.image.onloadeddata = () => {
@@ -109,5 +143,41 @@ export class CanvasPage implements OnInit {
 
     registra() {
 
+    }
+
+    async avanti(first?: boolean) {
+
+        if (this.entroEnabled) {
+            this.entroEnabled = false;
+            this.buttonFooter = "danger";
+            this.initCanvas();
+            return;
+        } else {
+            this.sendResult()
+        }
+    }
+
+    sendResult() {
+
+        const body = {
+            user_id: parseInt(localStorage.getItem('user_id')),
+            licens_id: parseInt(localStorage.getItem('licens_id')),
+            answer: {"Reaction-simple": this.result},
+        };
+
+
+
+          this.quizService.updateanswers(body).subscribe(
+              (data: any) => {
+                  this.router.navigate(['/canvas2']);
+              });
+
+    }
+
+    addResult() {
+        const m = moment();
+        if (this.result[this.attemp])
+            this.result[this.attemp].result = moment(m.diff(this.result[this.attemp].startTime)).format("mm:ss.SSS")
+        console.log(this.result);
     }
 }
